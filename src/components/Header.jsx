@@ -2,8 +2,6 @@
 import React from 'react';
 
 export default function Header({
-  simulationActive,
-  activeDate,
   fixtures,
   matchesResults
 }) {
@@ -57,11 +55,7 @@ export default function Header({
         <div className="fifa-badge" style={{ backgroundColor: 'rgba(16, 185, 129, 0.12)', border: '1px solid rgba(16, 185, 129, 0.2)' }}>
           Jogos Completados: <strong>{completedMatches} / 104</strong>
         </div>
-        {simulationActive && activeDate && (
-          <div className="fifa-badge" style={{ backgroundColor: 'rgba(236, 72, 153, 0.12)', border: '1px solid rgba(236, 72, 153, 0.2)', color: 'var(--accent-tertiary)' }}>
-            Simulando: <strong>{formatDateLabel(activeDate)}</strong>
-          </div>
-        )}
+
       </div>
     </header>
   );
