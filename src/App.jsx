@@ -32,19 +32,21 @@ export default function App() {
 
   // Load static data and results on mount
   useEffect(() => {
-    fetch('/data/teams.json')
+    const baseUrl = import.meta.env.BASE_URL;
+
+    fetch(`${baseUrl}data/teams.json`)
       .then(res => res.json())
       .then(data => setTeamsData(data));
 
-    fetch('/data/fixtures.json')
+    fetch(`${baseUrl}data/fixtures.json`)
       .then(res => res.json())
       .then(data => setFixtures(data));
 
-    fetch('/data/team_matches.json')
+    fetch(`${baseUrl}data/team_matches.json`)
       .then(res => res.json())
       .then(data => setTeamMatchesData(data));
 
-    fetch('/data/real_results.json')
+    fetch(`${baseUrl}data/real_results.json`)
       .then(res => res.json())
       .then(data => {
         initializeResults(data);
