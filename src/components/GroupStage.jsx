@@ -1,5 +1,6 @@
 // src/components/GroupStage.jsx
 import React, { useState } from 'react';
+import { formatKickoff } from '../utils/dateFormatter';
 
 export default function GroupStage({
   groupStandings,
@@ -146,14 +147,18 @@ export default function GroupStage({
 
             return (
               <div key={match.match_number} className={`match-card ${isLive ? 'live' : ''} ${isCompleted ? 'completed' : ''}`}>
-                <div className="match-header">
+                <div className="match-header" style={{ marginBottom: '0.4rem', paddingBottom: '0.2rem' }}>
                   <span>Jogo {match.match_number} • Grupo {match.group}</span>
                   <span style={{ 
-                    color: isLive ? 'var(--danger)' : isCompleted ? 'var(--text-dim)' : 'var(--accent-secondary)',
-                    fontWeight: 'bold' 
+                    color: isLive ? 'var(--danger)' : isCompleted ? 'var(--text-dim)' : 'var(--text-dim)',
+                    fontWeight: 'bold',
+                    fontSize: '0.7rem'
                   }}>
-                    {isLive ? '🔴 AO VIVO' : isCompleted ? 'FIM' : match.date}
+                    {isLive ? '🔴 AO VIVO' : isCompleted ? 'CONCLUÍDO' : 'AGUARDANDO'}
                   </span>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.3rem', fontSize: '0.75rem', color: 'var(--accent-secondary)', marginBottom: '0.8rem', opacity: 0.9 }}>
+                  <span>📅 {formatKickoff(match.kickoff_utc, match.date)}</span>
                 </div>
                 <div className="match-teams">
                   <div className="match-team-row">

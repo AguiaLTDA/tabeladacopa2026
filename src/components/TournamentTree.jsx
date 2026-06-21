@@ -1,5 +1,6 @@
 // src/components/TournamentTree.jsx
 import React from 'react';
+import { formatKickoff, translateStage } from '../utils/dateFormatter';
 
 export default function TournamentTree({
   knockoutMatches,
@@ -54,11 +55,16 @@ export default function TournamentTree({
         style={{ opacity: isCompleted ? 0.9 : 1 }}
       >
         {/* Match Header */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.65rem', color: 'var(--text-dim)', marginBottom: '0.3rem', borderBottom: '1px solid rgba(255,255,255,0.03)' }}>
-          <span>Jogo {matchNumber} • {match.stage === 'third-place' ? '3º Lugar' : match.stage.toUpperCase().replace('-', ' ')}</span>
-          <span style={{ color: isLive ? 'var(--danger)' : isCompleted ? 'var(--text-dim)' : 'var(--accent-secondary)' }}>
-            {isLive ? '🔴 LIVE' : isCompleted ? 'FIM' : match.date}
-          </span>
+        <div style={{ display: 'flex', flexDirection: 'column', fontSize: '0.65rem', color: 'var(--text-dim)', marginBottom: '0.4rem', borderBottom: '1px solid rgba(255,255,255,0.03)', paddingBottom: '0.2rem' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.1rem' }}>
+            <span style={{ fontWeight: 'bold' }}>Jogo {matchNumber} • {translateStage(match.stage)}</span>
+            <span style={{ color: isLive ? 'var(--danger)' : isCompleted ? 'var(--text-dim)' : 'var(--text-dim)', fontWeight: 'bold' }}>
+              {isLive ? '🔴 LIVE' : isCompleted ? 'FIM' : 'PENDENTE'}
+            </span>
+          </div>
+          <div style={{ color: 'var(--accent-secondary)', opacity: 0.9 }}>
+            📅 {formatKickoff(match.kickoff_utc, match.date)}
+          </div>
         </div>
 
         {/* Home Team */}
