@@ -18,6 +18,7 @@ export default function App() {
   const [teamsData, setTeamsData] = useState([]);
   const [fixtures, setFixtures] = useState([]);
   const [teamMatchesData, setTeamMatchesData] = useState([]);
+  const [lastUpdate, setLastUpdate] = useState('');
 
   // Dynamic tournament state (loaded from real_results.json)
   const [matchesResults, setMatchesResults] = useState({});
@@ -51,6 +52,11 @@ export default function App() {
       .then(data => {
         initializeResults(data);
       });
+
+    fetch(`${baseUrl}data/last_update.json`)
+      .then(res => res.json())
+      .then(data => setLastUpdate(data.last_update))
+      .catch(() => console.log('Last update timestamp not available yet.'));
   }, []);
 
   // Initialize matches results state
@@ -106,6 +112,7 @@ export default function App() {
       <Header 
         fixtures={fixtures}
         matchesResults={matchesResults}
+        lastUpdate={lastUpdate}
       />
 
       {/* Tabs Menu */}
@@ -166,6 +173,11 @@ export default function App() {
           onClose={() => setSelectedTeam(null)}
         />
       )}
+
+      {/* Footer */}
+      <footer style={{ marginTop: '5rem', textAlign: 'center', color: 'var(--text-dim)', fontSize: '0.85rem', borderTop: '1px solid var(--card-border)', padding: '2rem 0' }}>
+        Felipe Oliveira - Núcleo Águia
+      </footer>
     </div>
   );
 }

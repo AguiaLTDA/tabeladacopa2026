@@ -4,7 +4,7 @@ import sqlite3
 import os
 import re
 import math
-from datetime import datetime
+from datetime import datetime, timezone, timedelta
 
 # Poisson probability helper
 def poisson_probability(k, lam):
@@ -749,6 +749,11 @@ def main():
     # Save to JSON in public/data
     with open("public/data/teams.json", "w", encoding="utf-8") as f:
         json.dump(consolidated_data, f, indent=2, ensure_ascii=False)
+        
+    # Save last update timestamp
+    last_update_str = datetime.now(timezone(timedelta(hours=-3))).strftime("%d/%m/%Y %H:%M") + " BRT"
+    with open("public/data/last_update.json", "w", encoding="utf-8") as f:
+        json.dump({"last_update": last_update_str}, f)
         
     print(f"Data pipeline finished! Created SQLite '{db_file}' and updated React data files.")
 

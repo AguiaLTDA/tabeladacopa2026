@@ -3,7 +3,8 @@ import React from 'react';
 
 export default function Header({
   fixtures,
-  matchesResults
+  matchesResults,
+  lastUpdate
 }) {
   // Compute current stage of the tournament
   const totalMatches = Object.keys(matchesResults).length;
@@ -45,8 +46,13 @@ export default function Header({
 
   return (
     <header className="app-header">
-      <h1 className="app-title">Copa do Mundo FIFA 2026</h1>
+      <h1 className="app-title">Tabela Dinâmica da Copa</h1>
       <p className="app-subtitle">Dashboard de Resultados e Previsões em Tempo Real</p>
+      {lastUpdate && (
+        <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginTop: '0.4rem', opacity: 0.8 }}>
+          Última atualização: <strong>{lastUpdate}</strong>
+        </p>
+      )}
       
       <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem', marginTop: '1rem', flexWrap: 'wrap' }}>
         <div className="fifa-badge" style={{ backgroundColor: 'rgba(6, 182, 212, 0.12)', border: '1px solid rgba(6, 182, 212, 0.2)' }}>
