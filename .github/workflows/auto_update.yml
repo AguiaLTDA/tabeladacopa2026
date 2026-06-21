@@ -2,7 +2,7 @@ name: Auto-update Copa 2026 Results
 
 on:
   schedule:
-    - cron: '0 */3 * * *'   # Runs every 3 hours (8 times a day)
+    - cron: '0 0,2,4,7,9,12,14,16,19,21 * * *'   # Runs 10 times a day (spaced every 2-3 hours)
   workflow_dispatch:        # Allows manual trigger in Actions UI
 
 permissions:
