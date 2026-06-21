@@ -103,40 +103,140 @@ export default function TournamentTree({
   };
 
   return (
-    <div className="bracket-scroll-container">
-      <div className="bracket-container">
+    <div className="bracket-tab-wrapper" style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+      
+      {/* 1. Explicação do encaixe dos times (Top) */}
+      <div className="glass-card" style={{ padding: '2rem', borderLeft: '5px solid var(--accent-secondary)' }}>
+        <h3 style={{ color: 'var(--accent-secondary)', fontSize: '1.4rem', fontWeight: '700', marginBottom: '0.8rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          🔗 Estrutura de Encaixe da Fase de Grupos
+        </h3>
+        <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', marginBottom: '1.5rem', lineHeight: '1.6' }}>
+          Com o novo formato da Copa do Mundo de 2026 contendo <strong>48 seleções</strong> em <strong>12 grupos (A a L)</strong>, a fase de mata-mata (eliminatórias) é expandida para iniciar com <strong>32 seleções</strong> (32 avos de final). Classificam-se os <strong>2 primeiros de cada grupo</strong> e os <strong>8 melhores terceiros colocados</strong> no geral.
+        </p>
         
-        {/* Round of 32 */}
-        <div className="bracket-round">
-          <div className="bracket-round-title">32 avos de final</div>
-          {r32Order.map(num => renderMatchCard(num))}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '1.5rem' }}>
+          <div style={{ background: 'rgba(255, 255, 255, 0.02)', padding: '1.2rem', borderRadius: '12px', border: '1px solid var(--card-border)' }}>
+            <h4 style={{ color: 'var(--text-main)', fontSize: '1rem', fontWeight: '700', marginBottom: '0.8rem', borderBottom: '1px solid rgba(255,255,255,0.05)', paddingBottom: '0.4rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+              🎯 Confrontos Diretos Definidos
+            </h4>
+            <p style={{ color: 'var(--text-dim)', fontSize: '0.8rem', marginBottom: '0.8rem' }}>Confrontos fixados de antemão ligando líderes e vice-líderes de grupos:</p>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem', fontSize: '0.8rem', color: 'var(--text-muted)' }}>
+              <div>• <strong>Jogo 73:</strong> 2º A vs 2º B</div>
+              <div>• <strong>Jogo 75:</strong> 1º F vs 2º C</div>
+              <div>• <strong>Jogo 76:</strong> 1º C vs 2º F</div>
+              <div>• <strong>Jogo 78:</strong> 2º E vs 2º I</div>
+              <div>• <strong>Jogo 83:</strong> 2º K vs 2º L</div>
+              <div>• <strong>Jogo 84:</strong> 1º H vs 2º J</div>
+              <div>• <strong>Jogo 86:</strong> 1º J vs 2º H</div>
+              <div>• <strong>Jogo 88:</strong> 2º D vs 2º G</div>
+            </div>
+          </div>
+          
+          <div style={{ background: 'rgba(255, 255, 255, 0.02)', padding: '1.2rem', borderRadius: '12px', border: '1px solid var(--card-border)' }}>
+            <h4 style={{ color: 'var(--accent-secondary)', fontSize: '1rem', fontWeight: '700', marginBottom: '0.8rem', borderBottom: '1px solid rgba(255,255,255,0.05)', paddingBottom: '0.4rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+              ⚖️ Distribuição dos 8 Melhores 3º Colocados
+            </h4>
+            <p style={{ color: 'var(--text-dim)', fontSize: '0.8rem', marginBottom: '0.8rem' }}>Os 8 melhores terceiros enfrentam líderes de grupos (A, B, C, D, E, G, I, K, L) conforme regras matemáticas para evitar recontros do mesmo grupo:</p>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem', fontSize: '0.8rem', color: 'var(--text-muted)' }}>
+              <div>• <strong>Jogo 74:</strong> 1º E vs 3º A/B/C/D/F</div>
+              <div>• <strong>Jogo 77:</strong> 1º I vs 3º C/D/F/G/H</div>
+              <div>• <strong>Jogo 79:</strong> 1º A vs 3º C/E/F/H/I</div>
+              <div>• <strong>Jogo 80:</strong> 1º L vs 3º E/H/I/J/K</div>
+              <div>• <strong>Jogo 81:</strong> 1º D vs 3º B/E/F/I/J</div>
+              <div>• <strong>Jogo 82:</strong> 1º G vs 3º A/E/H/I/J</div>
+              <div>• <strong>Jogo 85:</strong> 1º B vs 3º E/F/G/I/J</div>
+              <div>• <strong>Jogo 87:</strong> 1º K vs 3º D/E/I/J/L</div>
+            </div>
+          </div>
         </div>
-
-        {/* Round of 16 */}
-        <div className="bracket-round">
-          <div className="bracket-round-title">Oitavas de final</div>
-          {r16Order.map(num => renderMatchCard(num))}
-        </div>
-
-        {/* Quarter-finals */}
-        <div className="bracket-round">
-          <div className="bracket-round-title">Quartas de final</div>
-          {qfOrder.map(num => renderMatchCard(num))}
-        </div>
-
-        {/* Semi-finals */}
-        <div className="bracket-round">
-          <div className="bracket-round-title">Semifinais</div>
-          {sfOrder.map(num => renderMatchCard(num))}
-        </div>
-
-        {/* Finals */}
-        <div className="bracket-round">
-          <div className="bracket-round-title">Finais</div>
-          {finalOrder.map(num => renderMatchCard(num))}
-        </div>
-
       </div>
+
+      {/* 2. O Diagrama de Confrontos (Bracket) */}
+      <div className="glass-card" style={{ padding: '1.5rem', overflow: 'hidden' }}>
+        <h3 style={{ color: 'var(--accent-primary)', fontSize: '1.4rem', fontWeight: '700', marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          🏆 Diagrama de Confrontos do Mata-Mata
+        </h3>
+        <div className="bracket-scroll-container" style={{ padding: '0 0 1rem 0' }}>
+          <div className="bracket-container">
+            
+            {/* Round of 32 */}
+            <div className="bracket-round">
+              <div className="bracket-round-title">32 avos de final</div>
+              {r32Order.map(num => renderMatchCard(num))}
+            </div>
+
+            {/* Round of 16 */}
+            <div className="bracket-round">
+              <div className="bracket-round-title">Oitavas de final</div>
+              {r16Order.map(num => renderMatchCard(num))}
+            </div>
+
+            {/* Quarter-finals */}
+            <div className="bracket-round">
+              <div className="bracket-round-title">Quartas de final</div>
+              {qfOrder.map(num => renderMatchCard(num))}
+            </div>
+
+            {/* Semi-finals */}
+            <div className="bracket-round">
+              <div className="bracket-round-title">Semifinais</div>
+              {sfOrder.map(num => renderMatchCard(num))}
+            </div>
+
+            {/* Finals */}
+            <div className="bracket-round">
+              <div className="bracket-round-title">Finais</div>
+              {finalOrder.map(num => renderMatchCard(num))}
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      {/* 3. Regras Consideradas (Bottom) */}
+      <div className="glass-card" style={{ padding: '2rem', borderTop: '4px solid var(--accent-primary)' }}>
+        <h3 style={{ color: 'var(--text-main)', fontSize: '1.3rem', fontWeight: '700', marginBottom: '1.2rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          📋 Regras e Critérios Considerados na Simulação
+        </h3>
+        
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '2rem', fontSize: '0.9rem', lineHeight: '1.6' }}>
+          <div>
+            <h4 style={{ color: 'var(--accent-secondary)', fontSize: '0.95rem', fontWeight: '700', marginBottom: '0.6rem' }}>
+              Critérios de Desempate (Fase de Grupos)
+            </h4>
+            <ul style={{ paddingLeft: '1.1rem', color: 'var(--text-muted)' }}>
+              <li><strong>Pontos obtidos:</strong> 3 por vitória, 1 por empate, 0 por derrota.</li>
+              <li><strong>Saldo de gols:</strong> Gols marcados menos gols sofridos.</li>
+              <li><strong>Gols marcados:</strong> Total de gols feitos no grupo.</li>
+              <li><strong>Confronto direto:</strong> Pontuação no jogo entre as duas seleções empatadas.</li>
+              <li><strong>Ranking FIFA:</strong> Critério final de desempate utilizado no pipeline.</li>
+            </ul>
+          </div>
+          
+          <div>
+            <h4 style={{ color: 'var(--accent-secondary)', fontSize: '0.95rem', fontWeight: '700', marginBottom: '0.6rem' }}>
+              Alocação dos Melhores Terceiros
+            </h4>
+            <p style={{ color: 'var(--text-muted)' }}>
+              Os 12 terceiros colocados são listados sob os mesmos critérios acima (pontos, saldo, gols, vitórias e ranking). Os <strong>8 melhores</strong> avançam.
+              <br />
+              Um <strong>algoritmo de emparelhamento dinâmico</strong> distribui essas equipes nos respectivos slots do mata-mata, priorizando evitar que uma equipe enfrente o líder do seu próprio grupo de origem na rodada inicial de 32 avos.
+            </p>
+          </div>
+          
+          <div>
+            <h4 style={{ color: 'var(--accent-secondary)', fontSize: '0.95rem', fontWeight: '700', marginBottom: '0.6rem' }}>
+              Regras das Fases Eliminatórias
+            </h4>
+            <ul style={{ paddingLeft: '1.1rem', color: 'var(--text-muted)' }}>
+              <li><strong>Eliminação simples:</strong> Os perdedores são eliminados diretamente (exceto das semifinais, que jogam a disputa de 3º lugar).</li>
+              <li><strong>Empates no tempo normal:</strong> Haverá prorrogação de 30 minutos (2 tempos de 15 min). Se persistir o empate, a vaga será decidida em disputa por pênaltis.</li>
+              <li><strong>Caminho fixo:</strong> A chave é pré-definida. Nenhuma equipe muda de lado na árvore após o início do mata-mata.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
     </div>
   );
 }
