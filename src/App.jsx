@@ -124,6 +124,12 @@ export default function App() {
           📊 Tabela de Grupos
         </button>
         <button 
+          className={`tab-button ${activeTab === 'MATCHES' ? 'active' : ''}`}
+          onClick={() => setActiveTab('MATCHES')}
+        >
+          📅 Partidas da Fase de Grupos
+        </button>
+        <button 
           className={`tab-button ${activeTab === 'TREE' ? 'active' : ''}`}
           onClick={() => setActiveTab('TREE')}
         >
@@ -145,6 +151,18 @@ export default function App() {
           matchesResults={matchesResults}
           bestThirds={bestThirds}
           onTeamClick={setSelectedTeam}
+          viewMode="STANDINGS"
+        />
+      )}
+
+      {activeTab === 'MATCHES' && (
+        <GroupStage 
+          groupStandings={groupStandings}
+          fixtures={fixtures}
+          matchesResults={matchesResults}
+          bestThirds={bestThirds}
+          onTeamClick={setSelectedTeam}
+          viewMode="MATCHES"
         />
       )}
 
