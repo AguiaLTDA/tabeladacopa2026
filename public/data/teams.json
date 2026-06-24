@@ -128,16 +128,16 @@
   {
     "team": "Colombia",
     "fifa_rank": 13,
-    "elo": 2082,
-    "form_index": 48.9,
-    "attack_strength": 2.29,
-    "defense_strength": 0.83,
-    "weighted_win_rate": 0.53,
-    "weighted_draw_rate": 0.27,
-    "weighted_loss_rate": 0.21,
-    "opponent_strength": 1909,
-    "weighted_goals_scored": 1.95,
-    "weighted_goals_conceded": 0.98
+    "elo": 2091,
+    "form_index": 49.5,
+    "attack_strength": 2.21,
+    "defense_strength": 0.78,
+    "weighted_win_rate": 0.56,
+    "weighted_draw_rate": 0.25,
+    "weighted_loss_rate": 0.19,
+    "opponent_strength": 1901,
+    "weighted_goals_scored": 1.89,
+    "weighted_goals_conceded": 0.91
   },
   {
     "team": "Croatia",
@@ -184,16 +184,16 @@
   {
     "team": "DR Congo",
     "fifa_rank": 54,
-    "elo": 1783,
-    "form_index": 55.0,
-    "attack_strength": 1.13,
-    "defense_strength": 0.66,
-    "weighted_win_rate": 0.57,
-    "weighted_draw_rate": 0.26,
-    "weighted_loss_rate": 0.18,
-    "opponent_strength": 1623,
-    "weighted_goals_scored": 1.27,
-    "weighted_goals_conceded": 0.59
+    "elo": 1774,
+    "form_index": 54.3,
+    "attack_strength": 1.08,
+    "defense_strength": 0.68,
+    "weighted_win_rate": 0.53,
+    "weighted_draw_rate": 0.24,
+    "weighted_loss_rate": 0.23,
+    "opponent_strength": 1651,
+    "weighted_goals_scored": 1.19,
+    "weighted_goals_conceded": 0.61
   },
   {
     "team": "Ecuador",
