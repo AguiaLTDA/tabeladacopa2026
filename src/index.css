@@ -723,3 +723,122 @@ body {
   from { opacity: 0; }
   to { opacity: 1; }
 }
+
+/* --- DYNAMIC TOURNAMENT TREE VIEW CONTROLS --- */
+
+.tree-view-controls-card {
+  border-left: 4px solid var(--accent-primary) !important;
+}
+
+.view-mode-toggle-group {
+  display: flex;
+  background: rgba(255, 255, 255, 0.03);
+  padding: 0.3rem;
+  border-radius: 10px;
+  border: 1px solid var(--card-border);
+}
+
+.view-mode-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition-normal);
+}
+
+.view-mode-btn:hover {
+  color: var(--text-main);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.view-mode-btn.active {
+  background: var(--accent-primary);
+  color: #fff;
+  box-shadow: 0 0 10px rgba(139, 92, 246, 0.3);
+}
+
+.round-selector-pills {
+  display: flex;
+  gap: 0.6rem;
+  overflow-x: auto;
+  padding-bottom: 0.5rem;
+}
+
+.round-pill-btn {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--card-border);
+  color: var(--text-dim);
+  padding: 0.5rem 1.2rem;
+  border-radius: 50px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition-normal);
+  white-space: nowrap;
+}
+
+.round-pill-btn:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.15);
+  color: var(--text-main);
+}
+
+.round-pill-btn.active {
+  background: rgba(6, 182, 212, 0.15);
+  border-color: var(--accent-secondary);
+  color: var(--accent-secondary);
+  box-shadow: 0 0 10px rgba(6, 182, 212, 0.1);
+  font-weight: 600;
+}
+
+.bracket-grid-layout {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+  padding: 1rem 0;
+}
+
+/* Remove connector lines for grid layouts */
+.bracket-grid-layout .bracket-match-node::before {
+  display: none;
+}
+
+/* Red alerts for large quality disparity (high Elo gap) */
+.bracket-match-node.disparity-warning {
+  border: 1px solid rgba(239, 68, 68, 0.45);
+  box-shadow: 0 4px 15px rgba(239, 68, 68, 0.12);
+  animation: border-pulse-red 3s infinite;
+}
+
+@keyframes border-pulse-red {
+  0%, 100% {
+    border-color: rgba(239, 68, 68, 0.45);
+    box-shadow: 0 4px 15px rgba(239, 68, 68, 0.12);
+  }
+  50% {
+    border-color: rgba(239, 68, 68, 0.9);
+    box-shadow: 0 4px 22px rgba(239, 68, 68, 0.28);
+  }
+}
+
+.match-disparity-alert {
+  background: rgba(239, 68, 68, 0.14);
+  border: 1px solid rgba(239, 68, 68, 0.35);
+  color: #f87171;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-align: center;
+  padding: 0.3rem 0.5rem;
+  border-radius: 6px;
+  margin-bottom: 0.6rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}

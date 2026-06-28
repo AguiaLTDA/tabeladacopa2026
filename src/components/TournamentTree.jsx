@@ -1,18 +1,31 @@
 // src/components/TournamentTree.jsx
-import React from 'react';
+import React, { useState } from 'react';
 import { formatKickoff, translateStage } from '../utils/dateFormatter';
 
 export default function TournamentTree({
   knockoutMatches,
   matchesResults,
-  onTeamClick
+  onTeamClick,
+  teamsData
 }) {
+  // State for dynamic visualization
+  const [treeViewMode, setTreeViewMode] = useState('FULL'); // 'FULL' or 'ROUND'
+  const [selectedRound, setSelectedRound] = useState('r32'); // 'r32', 'r16', 'qf', 'sf', 'final'
+
   // Ordered match numbers to align them visually
   const r32Order = [73, 75, 74, 77, 76, 78, 79, 80, 83, 84, 81, 82, 86, 88, 85, 87];
   const r16Order = [90, 89, 91, 92, 93, 94, 95, 96];
   const qfOrder = [97, 99, 98, 100];
   const sfOrder = [101, 102];
   const finalOrder = [104, 103]; // Final first, then 3rd Place
+
+  const roundsMap = {
+    r32: { title: '32 avos de final', order: r32Order },
+    r16: { title: 'Oitavas de final', order: r16Order },
+    qf: { title: 'Quartas de final', order: qfOrder },
+    sf: { title: 'Semifinais', order: sfOrder },
+    final: { title: 'Finais (Final & Disputa de 3º Lugar)', order: finalOrder }
+  };
 
   const getFlagPlaceholder = (teamName) => {
     if (!teamName || teamName.startsWith('Vencedor') || teamName.startsWith('Perdedor') || teamName.includes('Grupo') || teamName.includes('third')) {
@@ -48,12 +61,31 @@ export default function TournamentTree({
     const isHomeWinner = isCompleted && (homeScore > awayScore || (homeScore === awayScore && result.penalties_home > result.penalties_away));
     const isAwayWinner = isCompleted && (awayScore > homeScore || (homeScore === awayScore && result.penalties_away > result.penalties_home));
 
+    // Calculate quality difference (Elo disparity)
+    let hasQualityGap = false;
+    let eloDiff = 0;
+    if (!isHomePlaceholder && !isAwayPlaceholder && teamsData) {
+      const homeTeam = teamsData.find(t => t.team === home);
+      const awayTeam = teamsData.find(t => t.team === away);
+      if (homeTeam && awayTeam) {
+        eloDiff = Math.abs(homeTeam.elo - awayTeam.elo);
+        if (eloDiff >= 250) {
+          hasQualityGap = true;
+        }
+      }
+    }
+
     return (
       <div 
         key={matchNumber} 
-        className={`bracket-match-node ${isLive ? 'active-simulate' : ''}`}
+        className={`bracket-match-node ${isLive ? 'active-simulate' : ''} ${hasQualityGap ? 'disparity-warning' : ''}`}
         style={{ opacity: isCompleted ? 0.9 : 1 }}
       >
+        {hasQualityGap && (
+          <div className="match-disparity-alert">
+            ⚠️ Alta Disparidade ({eloDiff} pts Elo)
+          </div>
+        )}
         {/* Match Header */}
         <div style={{ display: 'flex', flexDirection: 'column', fontSize: '0.65rem', color: 'var(--text-dim)', marginBottom: '0.4rem', borderBottom: '1px solid rgba(255,255,255,0.03)', paddingBottom: '0.2rem' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.1rem' }}>
@@ -103,52 +135,48 @@ export default function TournamentTree({
   };
 
   return (
-    <div className="bracket-tab-wrapper" style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+    <div className="bracket-tab-wrapper" style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
       
-      {/* 1. Explicação do encaixe dos times (Top) */}
-      <div className="glass-card" style={{ padding: '2rem', borderLeft: '5px solid var(--accent-secondary)' }}>
-        <h3 style={{ color: 'var(--accent-secondary)', fontSize: '1.4rem', fontWeight: '700', marginBottom: '0.8rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-          🔗 Estrutura de Encaixe da Fase de Grupos
-        </h3>
-        <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', marginBottom: '1.5rem', lineHeight: '1.6' }}>
-          Com o novo formato da Copa do Mundo de 2026 contendo <strong>48 seleções</strong> em <strong>12 grupos (A a L)</strong>, a fase de mata-mata (eliminatórias) é expandida para iniciar com <strong>32 seleções</strong> (32 avos de final). Classificam-se os <strong>2 primeiros de cada grupo</strong> e os <strong>8 melhores terceiros colocados</strong> no geral.
-        </p>
-        
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '1.5rem' }}>
-          <div style={{ background: 'rgba(255, 255, 255, 0.02)', padding: '1.2rem', borderRadius: '12px', border: '1px solid var(--card-border)' }}>
-            <h4 style={{ color: 'var(--text-main)', fontSize: '1rem', fontWeight: '700', marginBottom: '0.8rem', borderBottom: '1px solid rgba(255,255,255,0.05)', paddingBottom: '0.4rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-              🎯 Confrontos Diretos Definidos
-            </h4>
-            <p style={{ color: 'var(--text-dim)', fontSize: '0.8rem', marginBottom: '0.8rem' }}>Confrontos fixados de antemão ligando líderes e vice-líderes de grupos:</p>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem', fontSize: '0.8rem', color: 'var(--text-muted)' }}>
-              <div>• <strong>Jogo 73:</strong> 2º A vs 2º B</div>
-              <div>• <strong>Jogo 75:</strong> 1º F vs 2º C</div>
-              <div>• <strong>Jogo 76:</strong> 1º C vs 2º F</div>
-              <div>• <strong>Jogo 78:</strong> 2º E vs 2º I</div>
-              <div>• <strong>Jogo 83:</strong> 2º K vs 2º L</div>
-              <div>• <strong>Jogo 84:</strong> 1º H vs 2º J</div>
-              <div>• <strong>Jogo 86:</strong> 1º J vs 2º H</div>
-              <div>• <strong>Jogo 88:</strong> 2º D vs 2º G</div>
-            </div>
+      {/* Controles de Visualização Dinâmica */}
+      <div className="tree-view-controls-card glass-card" style={{ padding: '1.5rem', borderLeft: '4px solid var(--accent-primary)' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
+          <div>
+            <h3 style={{ color: 'var(--text-main)', fontSize: '1.2rem', fontWeight: '700', margin: 0, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              👁️ Visualização Dinâmica do Mata-Mata
+            </h3>
+            <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', margin: '0.25rem 0 0 0' }}>
+              Escolha entre visualizar a chave horizontal completa ou focar em uma rodada específica.
+            </p>
           </div>
-          
-          <div style={{ background: 'rgba(255, 255, 255, 0.02)', padding: '1.2rem', borderRadius: '12px', border: '1px solid var(--card-border)' }}>
-            <h4 style={{ color: 'var(--accent-secondary)', fontSize: '1rem', fontWeight: '700', marginBottom: '0.8rem', borderBottom: '1px solid rgba(255,255,255,0.05)', paddingBottom: '0.4rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-              ⚖️ Distribuição dos 8 Melhores 3º Colocados
-            </h4>
-            <p style={{ color: 'var(--text-dim)', fontSize: '0.8rem', marginBottom: '0.8rem' }}>Os 8 melhores terceiros enfrentam líderes de grupos (A, B, C, D, E, G, I, K, L) conforme regras matemáticas para evitar recontros do mesmo grupo:</p>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem', fontSize: '0.8rem', color: 'var(--text-muted)' }}>
-              <div>• <strong>Jogo 74:</strong> 1º E vs 3º A/B/C/D/F</div>
-              <div>• <strong>Jogo 77:</strong> 1º I vs 3º C/D/F/G/H</div>
-              <div>• <strong>Jogo 79:</strong> 1º A vs 3º C/E/F/H/I</div>
-              <div>• <strong>Jogo 80:</strong> 1º L vs 3º E/H/I/J/K</div>
-              <div>• <strong>Jogo 81:</strong> 1º D vs 3º B/E/F/I/J</div>
-              <div>• <strong>Jogo 82:</strong> 1º G vs 3º A/E/H/I/J</div>
-              <div>• <strong>Jogo 85:</strong> 1º B vs 3º E/F/G/I/J</div>
-              <div>• <strong>Jogo 87:</strong> 1º K vs 3º D/E/I/J/L</div>
-            </div>
+          <div className="view-mode-toggle-group">
+            <button 
+              className={`view-mode-btn ${treeViewMode === 'FULL' ? 'active' : ''}`}
+              onClick={() => setTreeViewMode('FULL')}
+            >
+              🌳 Chave Completa
+            </button>
+            <button 
+              className={`view-mode-btn ${treeViewMode === 'ROUND' ? 'active' : ''}`}
+              onClick={() => setTreeViewMode('ROUND')}
+            >
+              🎯 Por Rodada
+            </button>
           </div>
         </div>
+
+        {treeViewMode === 'ROUND' && (
+          <div className="round-selector-pills" style={{ marginTop: '1.2rem' }}>
+            {Object.entries(roundsMap).map(([key, value]) => (
+              <button
+                key={key}
+                className={`round-pill-btn ${selectedRound === key ? 'active' : ''}`}
+                onClick={() => setSelectedRound(key)}
+              >
+                {value.title}
+              </button>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* 2. O Diagrama de Confrontos (Bracket) */}
@@ -156,41 +184,53 @@ export default function TournamentTree({
         <h3 style={{ color: 'var(--accent-primary)', fontSize: '1.4rem', fontWeight: '700', marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
           🏆 Diagrama de Confrontos do Mata-Mata
         </h3>
-        <div className="bracket-scroll-container" style={{ padding: '0 0 1rem 0' }}>
-          <div className="bracket-container">
-            
-            {/* Round of 32 */}
-            <div className="bracket-round">
-              <div className="bracket-round-title">32 avos de final</div>
-              {r32Order.map(num => renderMatchCard(num))}
-            </div>
 
-            {/* Round of 16 */}
-            <div className="bracket-round">
-              <div className="bracket-round-title">Oitavas de final</div>
-              {r16Order.map(num => renderMatchCard(num))}
-            </div>
+        {treeViewMode === 'FULL' ? (
+          <div className="bracket-scroll-container" style={{ padding: '0 0 1rem 0' }}>
+            <div className="bracket-container">
+              
+              {/* Round of 32 */}
+              <div className="bracket-round">
+                <div className="bracket-round-title">32 avos de final</div>
+                {r32Order.map(num => renderMatchCard(num))}
+              </div>
 
-            {/* Quarter-finals */}
-            <div className="bracket-round">
-              <div className="bracket-round-title">Quartas de final</div>
-              {qfOrder.map(num => renderMatchCard(num))}
-            </div>
+              {/* Round of 16 */}
+              <div className="bracket-round">
+                <div className="bracket-round-title">Oitavas de final</div>
+                {r16Order.map(num => renderMatchCard(num))}
+              </div>
 
-            {/* Semi-finals */}
-            <div className="bracket-round">
-              <div className="bracket-round-title">Semifinais</div>
-              {sfOrder.map(num => renderMatchCard(num))}
-            </div>
+              {/* Quarter-finals */}
+              <div className="bracket-round">
+                <div className="bracket-round-title">Quartas de final</div>
+                {qfOrder.map(num => renderMatchCard(num))}
+              </div>
 
-            {/* Finals */}
-            <div className="bracket-round">
-              <div className="bracket-round-title">Finais</div>
-              {finalOrder.map(num => renderMatchCard(num))}
-            </div>
+              {/* Semi-finals */}
+              <div className="bracket-round">
+                <div className="bracket-round-title">Semifinais</div>
+                {sfOrder.map(num => renderMatchCard(num))}
+              </div>
 
+              {/* Finals */}
+              <div className="bracket-round">
+                <div className="bracket-round-title">Finais</div>
+                {finalOrder.map(num => renderMatchCard(num))}
+              </div>
+
+            </div>
           </div>
-        </div>
+        ) : (
+          <div style={{ padding: '0.5rem 0' }}>
+            <h4 style={{ color: 'var(--accent-secondary)', fontSize: '1.1rem', fontWeight: '700', marginBottom: '1.2rem', borderBottom: '1px solid rgba(6, 182, 212, 0.15)', paddingBottom: '0.5rem' }}>
+              📍 {roundsMap[selectedRound].title}
+            </h4>
+            <div className="bracket-grid-layout">
+              {roundsMap[selectedRound].order.map(num => renderMatchCard(num))}
+            </div>
+          </div>
+        )}
       </div>
 
       {/* 3. Regras Consideradas (Bottom) */}

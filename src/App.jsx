@@ -171,6 +171,7 @@ export default function App() {
           knockoutMatches={knockoutMatches}
           matchesResults={matchesResults}
           onTeamClick={setSelectedTeam}
+          teamsData={teamsData}
         />
       )}
 
